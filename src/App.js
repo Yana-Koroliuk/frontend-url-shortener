@@ -1,11 +1,11 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
-import UserDetailsPage from './pages/UserDetailsPage';
-import LinkRedirectsPage from './pages/LinkRedirectsPage';
+import HomePage from './pages/home-page';
+import LoginPage from './pages/login-page';
+import RegisterPage from './pages/register-page';
+import DashboardPage from './pages/dashboard-page';
+import UserDetailsPage from './pages/user-details-page';
+import LinkRedirectsPage from './pages/link-redirects-page';
 import './App.css';
 
 function App() {

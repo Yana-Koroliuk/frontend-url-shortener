@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axiosInstance from '../api/axiosInstance';
+import authInterceptors from '../api/auth-interceptors';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
@@ -17,7 +17,7 @@ function LoginPage() {
         formData.append('password', password);
 
         try {
-            const response = await axiosInstance.post('/login', formData);
+            const response = await authInterceptors.post('/login', formData);
             localStorage.setItem('token', response.data.access_token);
 
             navigate('/dashboard');

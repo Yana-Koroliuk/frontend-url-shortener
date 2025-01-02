@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axiosInstance from '../api/axiosInstance';
+import authInterceptors from '../api/auth-interceptors';
 
 function DashboardPage() {
     const [urls, setUrls] = useState([]);
@@ -14,7 +14,7 @@ function DashboardPage() {
 
     const fetchUrls = async (page) => {
         try {
-            const response = await axiosInstance.get(`/me/urls?page=${page}`);
+            const response = await authInterceptors.get(`/me/urls?page=${page}`);
             setUrls(response.data);
         } catch (error) {
             setErrorMsg('Error loading URLs. Perhaps you are not logged in?');
@@ -26,7 +26,7 @@ function DashboardPage() {
         setErrorMsg('');
 
         try {
-            await axiosInstance.post('/me/urls', { url: newUrl });
+            await authInterceptors.post('/me/urls', { url: newUrl });
             setNewUrl('');
             fetchUrls(1);
         } catch (error) {

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
+const authInterceptors = axios.create({
     baseURL: 'http://localhost:8000/api',
 });
 
-axiosInstance.interceptors.request.use(
+authInterceptors.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-axiosInstance.interceptors.response.use(
+authInterceptors.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
@@ -25,4 +25,4 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-export default axiosInstance;
+export default authInterceptors;

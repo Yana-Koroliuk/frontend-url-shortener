@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axiosInstance from '../api/axiosInstance';
+import authInterceptors from '../api/auth-interceptors';
 import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
@@ -16,7 +16,7 @@ function RegisterPage() {
         setSuccessMsg('');
 
         try {
-            await axiosInstance.post('/register', {
+            await authInterceptors.post('/register', {
                 username,
                 password,
                 full_name: fullName || null,
