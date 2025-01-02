@@ -5,7 +5,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import UserDetailsPage from './pages/UserDetailsPage';
-import LinkRedirectsPage from './pages/LinkRedirectsPage';  // For timestamps
+import LinkRedirectsPage from './pages/LinkRedirectsPage';
 import './App.css';
 
 function App() {
