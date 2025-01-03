@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {StrictMode} from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
+import App from './app/App';
+import ErrorBoundary from "./app/ErrorBoundary";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
-        <BrowserRouter>
+    <StrictMode>
+        <ErrorBoundary>
             <App />
-        </BrowserRouter>
-    </React.StrictMode>
+        </ErrorBoundary>
+    </StrictMode>
 );
