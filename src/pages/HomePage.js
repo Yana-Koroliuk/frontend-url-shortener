@@ -21,40 +21,6 @@ const HomePage = () => {
                 ) : (
                     <h1 className="text-2xl font-bold">You aren't authenticated</h1>
                 )}
-                <div className="mt-4 space-x-4">
-                    {!isAuthenticated && (
-                        <>
-                            <button
-                                onClick={() => navigate("/register")}
-                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                            >
-                                Sign Up
-                            </button>
-                            <button
-                                onClick={() => navigate("/login")}
-                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                            >
-                                Login
-                            </button>
-                        </>
-                    )}
-                    {isAuthenticated && (
-                        <>
-                            <button
-                                onClick={() => navigate("/urls")}
-                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                            >
-                                Your Links
-                            </button>
-                            <button
-                                onClick={handleLogout}
-                                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                            >
-                                Logout
-                            </button>
-                        </>
-                    )}
-                </div>
             </div>
         </Layout>
     );
