@@ -10,16 +10,37 @@ const LoginPage = () => {
         username: "",
         password: "",
     });
+
+    const [errors, setErrors] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+        setErrors((prev) => ({ ...prev, [name]: "" }));
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.username) {
+            newErrors.username = "Username is required.";
+        }
+        if (!formData.password) {
+            newErrors.password = "Password is required.";
+        }
+        return newErrors;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage("");
+        setErrors({});
+
+        const formErrors = validateForm();
+        if (Object.keys(formErrors).length > 0) {
+            setErrors(formErrors);
+            return;
+        }
 
         try {
             const response = await axios.post(
@@ -38,7 +59,7 @@ const LoginPage = () => {
 
             const { access_token } = response.data;
             localStorage.setItem("token", access_token);
-            localStorage.setItem("username", formData.username); // Save username for display purposes
+            localStorage.setItem("username", formData.username);
             navigate("/");
         } catch (error) {
             if (error.response?.status === 401) {
@@ -62,7 +83,7 @@ const LoginPage = () => {
                         value={formData.username}
                         onChange={handleChange}
                         placeholder="Enter your username"
-                        required
+                        error={errors.username}
                     />
                     <InputField
                         label="Password"
@@ -71,7 +92,7 @@ const LoginPage = () => {
                         value={formData.password}
                         onChange={handleChange}
                         placeholder="Enter your password"
-                        required
+                        error={errors.password}
                     />
                     <button
                         type="submit"

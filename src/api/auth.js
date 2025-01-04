@@ -20,7 +20,6 @@ axios.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            // Clear token and redirect to login
             localStorage.removeItem("token");
             window.location.href = "/unauthorized";
         }
@@ -49,7 +48,6 @@ export const isAuthenticated = () => {
     return isTokenValid();
 };
 
-// src/services/authService.js
 export const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
