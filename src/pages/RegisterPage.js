@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import Layout from "../components/Layout";
 import InputField from "../components/InputField";
 import axios from "axios";
@@ -15,8 +15,8 @@ const RegisterPage = () => {
     const [successMessage, setSuccessMessage] = useState("");
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setFormData((prev) => ({...prev, [name]: value}));
     };
 
     const validateForm = () => {
@@ -47,11 +47,11 @@ const RegisterPage = () => {
             setTimeout(() => navigate("/"), 2000);
         } catch (error) {
             if (error.response?.status === 409) {
-                setErrors({ username: "Username is already taken." });
+                setErrors({username: "Username is already taken."});
             } else if (error.response?.status === 422) {
-                setErrors({ form: "Validation error. Please check your inputs." });
+                setErrors({form: "Validation error. Please check your inputs."});
             } else {
-                setErrors({ form: "An unexpected error occurred. Please try again." });
+                setErrors({form: "An unexpected error occurred. Please try again."});
             }
         }
     };

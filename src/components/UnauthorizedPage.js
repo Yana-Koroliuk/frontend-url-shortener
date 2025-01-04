@@ -1,4 +1,4 @@
-import React from "react";
+import Paths from "../config/paths";
 
 const UnauthorizedPage = () => (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-red-100 to-red-300 text-gray-800">
@@ -8,7 +8,7 @@ const UnauthorizedPage = () => (
             You are not authorized to view this page. Please login to continue.
         </p>
         <button
-            onClick={() => (window.location.href = "/login")}
+            onClick={() => (window.location.href = Paths.LOGIN)}
             className="px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow hover:bg-blue-600 transition"
         >
             Go to Login

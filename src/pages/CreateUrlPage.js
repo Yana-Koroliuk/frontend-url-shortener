@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import Layout from "../components/Layout";
 import InputField from "../components/InputField";
-import axios from "axios";
-import {isAuthenticated, logout} from "../api/auth";
+import auth, {handleLogout, isAuthenticated} from "../api/auth";
+import Paths from "../config/paths";
+
+const urlPattern = /^(https?:\/\/)/;
 
 const CreateUrlPage = () => {
     const navigate = useNavigate();
@@ -13,7 +15,6 @@ const CreateUrlPage = () => {
     const [successMessage, setSuccessMessage] = useState("");
 
     const validateUrl = (url) => {
-        const urlPattern = /^(https?:\/\/)/;
         return urlPattern.test(url);
     };
 
@@ -29,36 +30,20 @@ const CreateUrlPage = () => {
         }
 
         try {
-            const token = localStorage.getItem("token");
-
-            const response = await axios.post(
-                `${process.env.REACT_APP_BACKEND_URL}/api/me/urls`,
-                { url: longUrl },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-
+            const response = await auth.post("/me/urls", { url: longUrl });
             setShortUrl(`${process.env.REACT_APP_BACKEND_URL}/${response.data.short}`);
             setSuccessMessage("Short URL created successfully!");
         } catch (error) {
             if (error.response?.status === 422) {
                 setErrorMessage("Validation error. Please ensure the URL is valid.");
-            } else if (error.response?.status === 401) {
-                navigate("/login");
             } else {
                 setErrorMessage("An unexpected error occurred. Please try again.");
             }
         }
     };
 
-    const handleLogout = () => {
-        logout();
-        navigate("/login");
-    };
-
     return (
-        <Layout  isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+        <Layout isAuthenticated={isAuthenticated()} onLogout={() => handleLogout(navigate)}>
             <div className="max-w-md mx-auto mt-8 p-4 border rounded shadow">
                 <h1 className="text-2xl font-bold mb-4 text-center">Create New Short URL</h1>
                 {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
@@ -109,7 +94,7 @@ const CreateUrlPage = () => {
                         Back to Home
                     </button>
                     <button
-                        onClick={() => navigate("/urls")}
+                        onClick={() => navigate(Paths.URLS)}
                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                     >
                         Back to All URLs

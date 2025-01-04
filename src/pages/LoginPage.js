@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import Layout from "../components/Layout";
 import InputField from "../components/InputField";
 import axios from "axios";
+import userService from "../api/userService";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -15,9 +16,9 @@ const LoginPage = () => {
     const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-        setErrors((prev) => ({ ...prev, [name]: "" }));
+        const {name, value} = e.target;
+        setFormData((prev) => ({...prev, [name]: value}));
+        setErrors((prev) => ({...prev, [name]: ""}));
     };
 
     const validateForm = () => {
@@ -58,9 +59,8 @@ const LoginPage = () => {
                 }
             );
 
-            const { access_token } = response.data;
-            localStorage.setItem("token", access_token);
-            localStorage.setItem("username", formData.username);
+            const {access_token} = response.data;
+            userService.saveUserInfo(access_token, formData.username);
             navigate("/");
         } catch (error) {
             if (error.response?.status === 401) {

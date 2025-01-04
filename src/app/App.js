@@ -7,18 +7,22 @@ import UrlDetailsPage from "../pages/UrlDetailsPage";
 import CreateUrlPage from "../pages/CreateUrlPage";
 import NotFoundPage from "../components/NotFoundPage";
 import UnauthorizedPage from "../components/UnauthorizedPage";
+import Paths from "../config/paths";
+import ProtectedRoute from "../components/ProtectedRoute"; // Import ProtectedRoute
 
 const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/urls" element={<UrlsPage />} />
-                <Route path="/urls/:id" element={<UrlDetailsPage />} />
-                <Route path="/create" element={<CreateUrlPage />} />
-                <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                <Route path={Paths.HOME} element={<HomePage />} />
+                <Route path={Paths.LOGIN} element={<LoginPage />} />
+                <Route path={Paths.REGISTER} element={<RegisterPage />} />
+                <Route path={Paths.UNAUTHORIZED} element={<UnauthorizedPage />} />
+
+                <Route path={Paths.URLS} element={<ProtectedRoute element={<UrlsPage />} />} />
+                <Route path={Paths.URL_DETAILS()} element={<ProtectedRoute element={<UrlDetailsPage />} />} />
+                <Route path={Paths.CREATE} element={<ProtectedRoute element={<CreateUrlPage />} />} />
+
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </Router>

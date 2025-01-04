@@ -1,5 +1,5 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import Paths from "../config/paths";
 
 const Header = ({ isAuthenticated, onLogout }) => (
     <header className="bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-md">
@@ -11,13 +11,13 @@ const Header = ({ isAuthenticated, onLogout }) => (
                 {!isAuthenticated ? (
                     <>
                         <Link
-                            to="/register"
+                            to={Paths.REGISTER}
                             className="px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg shadow-md hover:bg-gray-100 transition duration-300"
                         >
                             Sign Up
                         </Link>
                         <Link
-                            to="/login"
+                            to={Paths.LOGIN}
                             className="px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg shadow-md hover:bg-gray-100 transition duration-300"
                         >
                             Login
@@ -26,7 +26,7 @@ const Header = ({ isAuthenticated, onLogout }) => (
                 ) : (
                     <>
                         <Link
-                            to="/urls"
+                            to={Paths.URLS}
                             className="px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg shadow-md hover:bg-gray-100 transition duration-300"
                         >
                             Your Links

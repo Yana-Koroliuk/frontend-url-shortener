@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
-import axios from "axios";
-import {isAuthenticated, logout} from "../api/auth";
+import auth, {handleLogout, isAuthenticated} from "../api/auth";
+import Paths from "../config/paths";
+
+
+const urlsPerPage = 10;
+const columns = ["#", "Full URL", "Short URL", "Redirects", "Created At", "Actions"];
 
 const UrlsPage = () => {
     const navigate = useNavigate();
@@ -13,24 +17,12 @@ const UrlsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    const urlsPerPage = 10;
-    const columns = ["#", "Full URL", "Short URL", "Redirects", "Created At", "Actions"];
-
     const fetchTotalUrls = async () => {
         try {
-            const token = localStorage.getItem("token");
-
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/me`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
+            const response = await auth.get(`/me`);
             setTotalUrls(response.data.links);
         } catch (err) {
-            if (err.response?.status === 401) {
-                navigate("/login");
-            } else {
-                setError("Failed to fetch total URLs. Please try again.");
-            }
+            setError("Failed to fetch total URLs. Please try again.");
         }
     };
 
@@ -38,11 +30,8 @@ const UrlsPage = () => {
         setLoading(true);
         setError("");
         try {
-            const token = localStorage.getItem("token");
-
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/me/urls`, {
-                headers: { Authorization: `Bearer ${token}` },
-                params: { page },
+            const response = await auth.get(`/me/urls`, {
+                params: {page},
             });
 
             setUrls(
@@ -72,7 +61,7 @@ const UrlsPage = () => {
                     "Created At": new Date(url.created_at).toLocaleString(),
                     Actions: (
                         <button
-                            onClick={() => navigate(`/urls/${url.short}`, { state: { url } })}
+                            onClick={() => navigate(Paths.URL_DETAILS(url.short), {state: {url}})}
                             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                         >
                             Details
@@ -81,11 +70,7 @@ const UrlsPage = () => {
                 }))
             );
         } catch (err) {
-            if (err.response?.status === 401) {
-                navigate("/login");
-            } else {
-                setError("Failed to fetch URLs. Please try again.");
-            }
+            setError("Failed to fetch URLs. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -100,13 +85,8 @@ const UrlsPage = () => {
         setCurrentPage((prevPage) => prevPage + direction);
     };
 
-    const handleLogout = () => {
-        logout();
-        navigate("/login");
-    };
-
     return (
-        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+        <Layout isAuthenticated={isAuthenticated()} onLogout={() => handleLogout(navigate)}>
             <div className="max-w-4xl mx-auto mt-8 p-4">
                 <h1 className="text-2xl font-bold mb-4">Your Shortened URLs</h1>
                 <div className="flex justify-between items-center mb-4">
@@ -114,7 +94,7 @@ const UrlsPage = () => {
                         Total URLs: <span className="text-blue-600 font-bold">{totalUrls}</span>
                     </p>
                     <button
-                        onClick={() => navigate("/create")}
+                        onClick={() => navigate(Paths.CREATE)}
                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                     >
                         Create New Short URL
@@ -126,7 +106,7 @@ const UrlsPage = () => {
                     <p className="text-red-500">{error}</p>
                 ) : (
                     <>
-                        <Table columns={columns} data={urls} />
+                        <Table columns={columns} data={urls}/>
                         <div className="flex justify-between mt-4">
                             <button
                                 onClick={() => handlePageChange(-1)}
