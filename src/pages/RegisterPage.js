@@ -42,7 +42,7 @@ const RegisterPage = () => {
         }
 
         try {
-            await axios.post("http://localhost:8000/api/register", formData);
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/register`, formData);
             setSuccessMessage("Registration successful! Redirecting to home...");
             setTimeout(() => navigate("/"), 2000);
         } catch (error) {

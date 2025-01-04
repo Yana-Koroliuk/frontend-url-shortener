@@ -20,7 +20,7 @@ const UrlsPage = () => {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await axios.get(`http://localhost:8000/api/me`, {
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/me`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -40,7 +40,7 @@ const UrlsPage = () => {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await axios.get(`http://localhost:8000/api/me/urls`, {
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/me/urls`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { page },
             });
@@ -60,7 +60,7 @@ const UrlsPage = () => {
                     ),
                     "Short URL": (
                         <a
-                            href={`http://localhost:8000/${url.short}`}
+                            href={`${process.env.REACT_APP_BACKEND_URL}/${url.short}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 hover:underline"

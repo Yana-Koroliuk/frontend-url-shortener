@@ -31,7 +31,7 @@ const UrlDetailsPage = () => {
             const token = localStorage.getItem("token");
 
             const redirectsResponse = await axios.get(
-                `http://localhost:8000/api/me/links/${id}/redirects`,
+                `${process.env.REACT_APP_BACKEND_URL}/api/me/links/${id}/redirects`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
@@ -134,7 +134,7 @@ const UrlDetailsPage = () => {
                             <p className="mb-2">
                                 <span className="font-semibold">Short URL:</span>{" "}
                                 <a
-                                    href={`http://localhost:8000/${urlInfo.short}`}
+                                    href={`${process.env.REACT_APP_BACKEND_URL}/${urlInfo.short}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-500 hover:underline"

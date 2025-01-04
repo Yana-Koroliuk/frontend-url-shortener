@@ -32,14 +32,14 @@ const CreateUrlPage = () => {
             const token = localStorage.getItem("token");
 
             const response = await axios.post(
-                "http://localhost:8000/api/me/urls",
+                `${process.env.REACT_APP_BACKEND_URL}/api/me/urls`,
                 { url: longUrl },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
 
-            setShortUrl(`http://localhost:8000/${response.data.short}`);
+            setShortUrl(`${process.env.REACT_APP_BACKEND_URL}/${response.data.short}`);
             setSuccessMessage("Short URL created successfully!");
         } catch (error) {
             if (error.response?.status === 422) {

@@ -43,8 +43,9 @@ const LoginPage = () => {
         }
 
         try {
+            console.log(process.env.REACT_APP_BACKEND_URL)
             const response = await axios.post(
-                "http://localhost:8000/api/login",
+                `${process.env.REACT_APP_BACKEND_URL}/api/login`,
                 new URLSearchParams({
                     username: formData.username,
                     password: formData.password,
