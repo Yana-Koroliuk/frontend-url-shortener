@@ -7,18 +7,19 @@ import UrlDetailsPage from "../pages/UrlDetailsPage";
 import CreateUrlPage from "../pages/CreateUrlPage";
 import NotFoundPage from "../components/NotFoundPage";
 import UnauthorizedPage from "../components/UnauthorizedPage";
+import Paths from "../config/paths";
 
 const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/urls" element={<UrlsPage />} />
-                <Route path="/urls/:id" element={<UrlDetailsPage />} />
-                <Route path="/create" element={<CreateUrlPage />} />
-                <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                <Route path={Paths.HOME} element={<HomePage />} />
+                <Route path={Paths.LOGIN} element={<LoginPage />} />
+                <Route path={Paths.REGISTER} element={<RegisterPage />} />
+                <Route path={Paths.URLS} element={<UrlsPage />} />
+                <Route path={Paths.URL_DETAILS()} element={<UrlDetailsPage />} />
+                <Route path={Paths.CREATE} element={<CreateUrlPage />} />
+                <Route path={Paths.UNAUTHORIZED} element={<UnauthorizedPage />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </Router>

@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import Table from "../components/Table";
 import axios from "axios";
 import {isAuthenticated, logout} from "../api/auth";
+import Paths from "../config/paths";
 
 const UrlsPage = () => {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ const UrlsPage = () => {
             setTotalUrls(response.data.links);
         } catch (err) {
             if (err.response?.status === 401) {
-                navigate("/login");
+                navigate(Paths.LOGIN);
             } else {
                 setError("Failed to fetch total URLs. Please try again.");
             }
@@ -72,7 +73,7 @@ const UrlsPage = () => {
                     "Created At": new Date(url.created_at).toLocaleString(),
                     Actions: (
                         <button
-                            onClick={() => navigate(`/urls/${url.short}`, { state: { url } })}
+                            onClick={() => navigate(Paths.URL_DETAILS(url.short), { state: { url } })}
                             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                         >
                             Details
@@ -82,7 +83,7 @@ const UrlsPage = () => {
             );
         } catch (err) {
             if (err.response?.status === 401) {
-                navigate("/login");
+                navigate(Paths.LOGIN);
             } else {
                 setError("Failed to fetch URLs. Please try again.");
             }
@@ -102,7 +103,7 @@ const UrlsPage = () => {
 
     const handleLogout = () => {
         logout();
-        navigate("/login");
+        navigate(Paths.LOGIN);
     };
 
     return (
@@ -114,7 +115,7 @@ const UrlsPage = () => {
                         Total URLs: <span className="text-blue-600 font-bold">{totalUrls}</span>
                     </p>
                     <button
-                        onClick={() => navigate("/create")}
+                        onClick={() => navigate(Paths.CREATE)}
                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                     >
                         Create New Short URL

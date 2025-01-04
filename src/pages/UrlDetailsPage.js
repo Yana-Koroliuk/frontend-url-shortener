@@ -14,6 +14,7 @@ import {
 } from "chart.js";
 import { useLocation } from "react-router";
 import { isAuthenticated, logout } from "../api/auth";
+import Paths from "../config/paths";
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -38,7 +39,7 @@ const UrlDetailsPage = () => {
             setRedirects(redirectsResponse.data);
         } catch (err) {
             if (err.response?.status === 401) {
-                navigate("/login");
+                navigate(Paths.LOGIN);
             } else {
                 setError("Failed to fetch redirects. Please try again.");
             }
@@ -49,7 +50,7 @@ const UrlDetailsPage = () => {
 
     useEffect(() => {
         if (!urlInfo) {
-            navigate("/urls");
+            navigate(Paths.URLS);
         } else {
             fetchRedirects();
         }
@@ -106,7 +107,7 @@ const UrlDetailsPage = () => {
 
     const handleLogout = () => {
         logout();
-        navigate("/login");
+        navigate(Paths.LOGIN);
     };
 
     return (
@@ -163,7 +164,7 @@ const UrlDetailsPage = () => {
                         </div>
                         <div className="flex space-x-4 mt-6">
                             <button
-                                onClick={() => navigate("/urls")}
+                                onClick={() => navigate(Paths.URLS)}
                                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                             >
                                 Back to All URLs

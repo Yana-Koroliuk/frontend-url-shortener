@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {jwtDecode} from "jwt-decode";
+import Paths from "../config/paths";
 
 const auth = axios.create({
     baseURL: `${process.env.REACT_APP_BACKEND_URL}/api`,
@@ -20,13 +21,13 @@ axios.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            const excludedEndpoints = ["/login"];
+            const excludedEndpoints = [Paths.LOGIN];
             const requestUrl = error.config.url;
 
             localStorage.removeItem("token");
 
             if (!excludedEndpoints.some(endpoint => requestUrl.includes(endpoint))) {
-                window.location.href = "/unauthorized";
+                window.location.href = Paths.UNAUTHORIZED;
             }
         }
         return Promise.reject(error);

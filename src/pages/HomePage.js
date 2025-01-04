@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import { logout } from "../api/auth";
+import Paths from "../config/paths";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ const HomePage = () => {
 
     const handleLogout = () => {
         logout();
-        navigate("/login");
+        navigate(Paths.LOGIN);
     };
 
     return (

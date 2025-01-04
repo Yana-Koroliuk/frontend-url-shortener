@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import InputField from "../components/InputField";
 import axios from "axios";
 import {isAuthenticated, logout} from "../api/auth";
+import Paths from "../config/paths";
 
 const CreateUrlPage = () => {
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ const CreateUrlPage = () => {
             if (error.response?.status === 422) {
                 setErrorMessage("Validation error. Please ensure the URL is valid.");
             } else if (error.response?.status === 401) {
-                navigate("/login");
+                navigate(Paths.LOGIN);
             } else {
                 setErrorMessage("An unexpected error occurred. Please try again.");
             }
@@ -54,7 +55,7 @@ const CreateUrlPage = () => {
 
     const handleLogout = () => {
         logout();
-        navigate("/login");
+        navigate(Paths.LOGIN);
     };
 
     return (
@@ -109,7 +110,7 @@ const CreateUrlPage = () => {
                         Back to Home
                     </button>
                     <button
-                        onClick={() => navigate("/urls")}
+                        onClick={() => navigate(Paths.URLS)}
                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                     >
                         Back to All URLs
