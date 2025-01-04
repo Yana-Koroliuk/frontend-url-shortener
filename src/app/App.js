@@ -8,6 +8,7 @@ import CreateUrlPage from "../pages/CreateUrlPage";
 import NotFoundPage from "../components/NotFoundPage";
 import UnauthorizedPage from "../components/UnauthorizedPage";
 import Paths from "../config/paths";
+import ProtectedRoute from "../components/ProtectedRoute"; // Import ProtectedRoute
 
 const App = () => {
     return (
@@ -16,10 +17,12 @@ const App = () => {
                 <Route path={Paths.HOME} element={<HomePage />} />
                 <Route path={Paths.LOGIN} element={<LoginPage />} />
                 <Route path={Paths.REGISTER} element={<RegisterPage />} />
-                <Route path={Paths.URLS} element={<UrlsPage />} />
-                <Route path={Paths.URL_DETAILS()} element={<UrlDetailsPage />} />
-                <Route path={Paths.CREATE} element={<CreateUrlPage />} />
                 <Route path={Paths.UNAUTHORIZED} element={<UnauthorizedPage />} />
+
+                <Route path={Paths.URLS} element={<ProtectedRoute element={<UrlsPage />} />} />
+                <Route path={Paths.URL_DETAILS()} element={<ProtectedRoute element={<UrlDetailsPage />} />} />
+                <Route path={Paths.CREATE} element={<ProtectedRoute element={<CreateUrlPage />} />} />
+
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </Router>
