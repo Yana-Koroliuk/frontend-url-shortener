@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import InputField from "../components/InputField";
 import axios from "axios";
+import {isAuthenticated, logout} from "../api/auth";
 
 const CreateUrlPage = () => {
     const navigate = useNavigate();
@@ -55,8 +56,13 @@ const CreateUrlPage = () => {
         }
     };
 
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
+
     return (
-        <Layout>
+        <Layout  isAuthenticated={isAuthenticated} onLogout={handleLogout}>
             <div className="max-w-md mx-auto mt-8 p-4 border rounded shadow">
                 <h1 className="text-2xl font-bold mb-4 text-center">Create New Short URL</h1>
                 {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
