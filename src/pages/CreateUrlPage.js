@@ -30,10 +30,6 @@ const CreateUrlPage = () => {
 
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                navigate("/login");
-                return;
-            }
 
             const response = await axios.post(
                 "http://localhost:8000/api/me/urls",

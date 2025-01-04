@@ -29,10 +29,6 @@ const UrlDetailsPage = () => {
     const fetchRedirects = async () => {
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                navigate("/login");
-                return;
-            }
 
             const redirectsResponse = await axios.get(
                 `http://localhost:8000/api/me/links/${id}/redirects`,

@@ -19,10 +19,6 @@ const UrlsPage = () => {
     const fetchTotalUrls = async () => {
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                navigate("/login");
-                return;
-            }
 
             const response = await axios.get(`http://localhost:8000/api/me`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -43,10 +39,6 @@ const UrlsPage = () => {
         setError("");
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                navigate("/login");
-                return;
-            }
 
             const response = await axios.get(`http://localhost:8000/api/me/urls`, {
                 headers: { Authorization: `Bearer ${token}` },
