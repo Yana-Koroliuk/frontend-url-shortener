@@ -7,23 +7,24 @@ class ErrorBoundary extends React.Component {
     }
 
     static getDerivedStateFromError(error) {
-        // Update state so the next render shows the fallback UI.
         return { hasError: true, errorMessage: error.message };
     }
 
     componentDidCatch(error, errorInfo) {
-        // Log error details for debugging.
         console.error("ErrorBoundary caught an error:", error, errorInfo);
     }
 
     render() {
         if (this.state.hasError) {
-            // Fallback UI
             return (
-                <div className="text-center p-4">
-                    <h1 className="text-2xl font-bold">Something went wrong</h1>
-                    <p>{this.state.errorMessage}</p>
-                    <button onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+                <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-yellow-100 to-yellow-300 text-gray-800">
+                    <h1 className="text-6xl font-extrabold mb-4 text-yellow-600">Oops!</h1>
+                    <h2 className="text-2xl font-semibold mb-2">Something went wrong</h2>
+                    <p className="mb-6 text-lg">{this.state.errorMessage}</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow hover:bg-blue-600 transition"
+                    >
                         Reload Page
                     </button>
                 </div>
