@@ -49,7 +49,6 @@ const UrlDetailsPage = () => {
 
     useEffect(() => {
         if (!urlInfo) {
-            // If no state was passed, fetch the URL details from the backend
             navigate("/urls");
         } else {
             fetchRedirects();
@@ -77,12 +76,12 @@ const UrlDetailsPage = () => {
 
     const plotOptions = {
         responsive: true,
-        maintainAspectRatio: false, // Allows custom dimensions
+        maintainAspectRatio: false,
         scales: {
             y: {
-                min: 0, // Ensure y-axis starts at 0
+                min: 0,
                 ticks: {
-                    stepSize: 1, // Increment y-axis by 1
+                    stepSize: 1,
                 },
             },
         },

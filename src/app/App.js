@@ -12,17 +12,12 @@ const App = () => {
     return (
         <Router>
             <Routes>
-                {/* Public Routes */}
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-
-                {/* Authenticated Routes */}
                 <Route path="/urls" element={<UrlsPage />} />
                 <Route path="/urls/:id" element={<UrlDetailsPage />} />
                 <Route path="/create" element={<CreateUrlPage />} />
-
-                {/* Error Routes */}
                 <Route path="/unauthorized" element={<UnauthorizedPage />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

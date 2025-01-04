@@ -20,12 +20,19 @@ axios.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
+            const excludedEndpoints = ["/login"];
+            const requestUrl = error.config.url;
+
             localStorage.removeItem("token");
-            window.location.href = "/unauthorized";
+
+            if (!excludedEndpoints.some(endpoint => requestUrl.includes(endpoint))) {
+                window.location.href = "/unauthorized";
+            }
         }
         return Promise.reject(error);
     }
 );
+
 
 
 const isTokenValid = () => {
