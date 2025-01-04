@@ -12,7 +12,8 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
-import {useLocation} from "react-router";
+import { useLocation } from "react-router";
+import { isAuthenticated, logout } from "../api/auth";
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -65,9 +66,11 @@ const UrlDetailsPage = () => {
             const date = new Date(timestamp);
             let key;
             if (groupBy === "minutes") {
-                key = `${date.getHours()}:${date.getMinutes()}`;
+                key = `${String(date.getHours()).padStart(2, "0")}:${String(
+                    date.getMinutes()
+                ).padStart(2, "0")}`;
             } else if (groupBy === "hours") {
-                key = `${date.getHours()}:00`;
+                key = `${String(date.getHours()).padStart(2, "0")}:00`;
             } else {
                 key = date.toDateString();
             }
@@ -106,8 +109,13 @@ const UrlDetailsPage = () => {
         };
     };
 
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
+
     return (
-        <Layout>
+        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout}>
             <div className="max-w-4xl mx-auto mt-8 p-4">
                 {loading ? (
                     <p>Loading...</p>
@@ -115,10 +123,10 @@ const UrlDetailsPage = () => {
                     <p className="text-red-500">{error}</p>
                 ) : (
                     <>
-                        <h1 className="text-2xl font-bold mb-4">URL Details</h1>
-                        <div className="mb-4">
-                            <p>
-                                <strong>Full URL:</strong>
+                        <h1 className="text-4xl font-bold text-blue-600 mb-4">URL Details</h1>
+                        <div className="bg-white shadow rounded-lg p-6 mb-6">
+                            <p className="mb-2">
+                                <span className="font-semibold">Full URL:</span>{" "}
                                 <a
                                     href={urlInfo.url}
                                     target="_blank"
@@ -128,8 +136,8 @@ const UrlDetailsPage = () => {
                                     {urlInfo.url}
                                 </a>
                             </p>
-                            <p>
-                                <strong>Short URL:</strong>{" "}
+                            <p className="mb-2">
+                                <span className="font-semibold">Short URL:</span>{" "}
                                 <a
                                     href={`http://localhost:8000/${urlInfo.short}`}
                                     target="_blank"
@@ -139,26 +147,26 @@ const UrlDetailsPage = () => {
                                     {urlInfo.short}
                                 </a>
                             </p>
-                            <p>
-                                <strong>Created At:</strong> {new Date(urlInfo.created_at).toLocaleString()}
+                            <p className="mb-2">
+                                <span className="font-semibold">Created At:</span> {new Date(urlInfo.created_at).toLocaleString()}
                             </p>
                             <p>
-                                <strong>Redirects Count:</strong> {urlInfo.redirects}
+                                <span className="font-semibold">Redirects Count:</span> {urlInfo.redirects}
                             </p>
                         </div>
-                        <div className="mb-8">
-                            <h2 className="text-xl font-bold">Redirect Metrics</h2>
-                            <div className="mt-4" style={{ height: "400px", width: "50%" }}>
+                        <div className="bg-white shadow rounded-lg p-6">
+                            <h2 className="text-2xl font-bold mb-4">Redirect Metrics</h2>
+                            <div className="mt-4" style={{ height: "300px", width: "100%" }}>
                                 <Line data={plotData("minutes")} options={plotOptions} />
                             </div>
-                            <div className="mt-4" style={{ height: "400px", width: "50%" }}>
+                            <div className="mt-8" style={{ height: "300px", width: "100%" }}>
                                 <Line data={plotData("hours")} options={plotOptions} />
                             </div>
-                            <div className="mt-4" style={{ height: "400px", width: "50%" }}>
+                            <div className="mt-8" style={{ height: "300px", width: "100%" }}>
                                 <Line data={plotData("days")} options={plotOptions} />
                             </div>
                         </div>
-                        <div className="flex space-x-4">
+                        <div className="flex space-x-4 mt-6">
                             <button
                                 onClick={() => navigate("/urls")}
                                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"

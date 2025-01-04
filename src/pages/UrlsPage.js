@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
 import axios from "axios";
+import {isAuthenticated, logout} from "../api/auth";
 
 const UrlsPage = () => {
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ const UrlsPage = () => {
     const [error, setError] = useState("");
 
     const urlsPerPage = 10; // Assuming the backend returns 10 items per page
-    const columns = ["#", "full_url", "short_url", "redirects", "created_at", "actions"];
+    const columns = ["#", "Full URL", "Short URL", "Redirects", "Created At", "Actions"];
 
     const fetchTotalUrls = async () => {
         try {
@@ -55,7 +56,7 @@ const UrlsPage = () => {
             setUrls(
                 response.data.map((url, idx) => ({
                     "#": (page - 1) * urlsPerPage + idx + 1,
-                    full_url: (
+                    "Full URL": (
                         <a
                             href={url.url}
                             target="_blank"
@@ -65,7 +66,7 @@ const UrlsPage = () => {
                             {url.url}
                         </a>
                     ),
-                    short_url: (
+                    "Short URL": (
                         <a
                             href={`http://localhost:8000/${url.short}`}
                             target="_blank"
@@ -75,9 +76,9 @@ const UrlsPage = () => {
                             {url.short}
                         </a>
                     ),
-                    redirects: url.redirects,
-                    created_at: new Date(url.created_at).toLocaleString(),
-                    actions: (
+                    Redirects: url.redirects,
+                    "Created At": new Date(url.created_at).toLocaleString(),
+                    Actions: (
                         <button
                             onClick={() => navigate(`/urls/${url.short}`, { state: { url } })}
                             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -107,12 +108,19 @@ const UrlsPage = () => {
         setCurrentPage((prevPage) => prevPage + direction);
     };
 
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
+
     return (
-        <Layout>
+        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout}>
             <div className="max-w-4xl mx-auto mt-8 p-4">
                 <h1 className="text-2xl font-bold mb-4">Your Shortened URLs</h1>
                 <div className="flex justify-between items-center mb-4">
-                    <p>Total URLs: {totalUrls}</p>
+                    <p className="text-lg font-medium text-gray-700">
+                        Total URLs: <span className="text-blue-600 font-bold">{totalUrls}</span>
+                    </p>
                     <button
                         onClick={() => navigate("/create")}
                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -131,14 +139,22 @@ const UrlsPage = () => {
                             <button
                                 onClick={() => handlePageChange(-1)}
                                 disabled={currentPage === 1}
-                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 disabled:bg-gray-300"
+                                className={`px-4 py-2 rounded ${
+                                    currentPage === 1
+                                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                        : "bg-gray-500 text-white hover:bg-gray-600"
+                                }`}
                             >
                                 Previous
                             </button>
                             <button
                                 onClick={() => handlePageChange(1)}
                                 disabled={currentPage * urlsPerPage >= totalUrls}
-                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                                className={`px-4 py-2 rounded ${
+                                    currentPage * urlsPerPage >= totalUrls
+                                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                        : "bg-gray-500 text-white hover:bg-gray-600"
+                                }`}
                             >
                                 Next
                             </button>
