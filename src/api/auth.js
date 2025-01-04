@@ -21,11 +21,10 @@ axios.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            const excludedEndpoints = [Paths.LOGIN];
-            const requestUrl = error.config.url;
-
             localStorage.removeItem("token");
 
+            const excludedEndpoints = [Paths.LOGIN];
+            const requestUrl = error.config.url;
             if (!excludedEndpoints.some(endpoint => requestUrl.includes(endpoint))) {
                 window.location.href = Paths.UNAUTHORIZED;
             }
@@ -33,8 +32,6 @@ axios.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
-
 
 const isTokenValid = () => {
     const token = localStorage.getItem('token');
@@ -49,15 +46,16 @@ const isTokenValid = () => {
     }
 };
 
-
-export default auth;
-
 export const isAuthenticated = () => {
     return isTokenValid();
 };
 
-export const logout = () => {
+export const handleLogout = () => (navigate) => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("full_name");
+
+    navigate(Paths.LOGIN);
 };
+
+export default auth;

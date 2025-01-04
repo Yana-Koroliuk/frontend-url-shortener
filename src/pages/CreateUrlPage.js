@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import Layout from "../components/Layout";
 import InputField from "../components/InputField";
 import axios from "axios";
-import {isAuthenticated, logout} from "../api/auth";
+import {handleLogout, isAuthenticated} from "../api/auth";
 import Paths from "../config/paths";
 
 const CreateUrlPage = () => {
@@ -34,9 +34,9 @@ const CreateUrlPage = () => {
 
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND_URL}/api/me/urls`,
-                { url: longUrl },
+                {url: longUrl},
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {Authorization: `Bearer ${token}`},
                 }
             );
 
@@ -53,13 +53,8 @@ const CreateUrlPage = () => {
         }
     };
 
-    const handleLogout = () => {
-        logout();
-        navigate(Paths.LOGIN);
-    };
-
     return (
-        <Layout  isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout(navigate)}>
             <div className="max-w-md mx-auto mt-8 p-4 border rounded shadow">
                 <h1 className="text-2xl font-bold mb-4 text-center">Create New Short URL</h1>
                 {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}

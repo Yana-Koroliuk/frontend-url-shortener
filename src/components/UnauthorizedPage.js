@@ -1,4 +1,3 @@
-import React from "react";
 import Paths from "../config/paths";
 
 const UnauthorizedPage = () => (

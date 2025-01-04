@@ -1,21 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Layout from "../components/Layout";
-import { logout } from "../api/auth";
-import Paths from "../config/paths";
+import {handleLogout, isAuthenticated} from "../api/auth";
 
 const HomePage = () => {
     const navigate = useNavigate();
-    const isAuthenticated = !!localStorage.getItem("token");
     const username = localStorage.getItem("username");
     const fullName = localStorage.getItem("full_name");
 
-    const handleLogout = () => {
-        logout();
-        navigate(Paths.LOGIN);
-    };
-
     return (
-        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout(navigate)}>
             <div className="flex flex-col items-center justify-center text-center">
                 {isAuthenticated ? (
                     <h1 className="text-4xl font-bold text-blue-700 mb-4">

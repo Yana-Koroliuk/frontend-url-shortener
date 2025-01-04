@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import Layout from "../components/Layout";
 import axios from "axios";
-import { Line } from "react-chartjs-2";
+import {Line} from "react-chartjs-2";
 import {
     Chart as ChartJS,
     LineElement,
@@ -12,15 +12,15 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
-import { useLocation } from "react-router";
-import { isAuthenticated, logout } from "../api/auth";
+import {useLocation} from "react-router";
+import {handleLogout, isAuthenticated} from "../api/auth";
 import Paths from "../config/paths";
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const UrlDetailsPage = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
+    const {id} = useParams();
     const location = useLocation();
     const [urlInfo, setUrlInfo] = useState(location.state?.url || null);
     const [redirects, setRedirects] = useState([]);
@@ -33,7 +33,7 @@ const UrlDetailsPage = () => {
 
             const redirectsResponse = await axios.get(
                 `${process.env.REACT_APP_BACKEND_URL}/api/me/links/${id}/redirects`,
-                { headers: { Authorization: `Bearer ${token}` } }
+                {headers: {Authorization: `Bearer ${token}`}}
             );
 
             setRedirects(redirectsResponse.data);
@@ -105,13 +105,8 @@ const UrlDetailsPage = () => {
         };
     };
 
-    const handleLogout = () => {
-        logout();
-        navigate(Paths.LOGIN);
-    };
-
     return (
-        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout(navigate)}>
             <div className="max-w-4xl mx-auto mt-8 p-4">
                 {loading ? (
                     <p>Loading...</p>
@@ -144,7 +139,8 @@ const UrlDetailsPage = () => {
                                 </a>
                             </p>
                             <p className="mb-2">
-                                <span className="font-semibold">Created At:</span> {new Date(urlInfo.created_at).toLocaleString()}
+                                <span
+                                    className="font-semibold">Created At:</span> {new Date(urlInfo.created_at).toLocaleString()}
                             </p>
                             <p>
                                 <span className="font-semibold">Redirects Count:</span> {urlInfo.redirects}
@@ -152,14 +148,14 @@ const UrlDetailsPage = () => {
                         </div>
                         <div className="bg-white shadow rounded-lg p-6">
                             <h2 className="text-2xl font-bold mb-4">Redirect Metrics</h2>
-                            <div className="mt-4" style={{ height: "300px", width: "100%" }}>
-                                <Line data={plotData("minutes")} options={plotOptions} />
+                            <div className="mt-4" style={{height: "300px", width: "100%"}}>
+                                <Line data={plotData("minutes")} options={plotOptions}/>
                             </div>
-                            <div className="mt-8" style={{ height: "300px", width: "100%" }}>
-                                <Line data={plotData("hours")} options={plotOptions} />
+                            <div className="mt-8" style={{height: "300px", width: "100%"}}>
+                                <Line data={plotData("hours")} options={plotOptions}/>
                             </div>
-                            <div className="mt-8" style={{ height: "300px", width: "100%" }}>
-                                <Line data={plotData("days")} options={plotOptions} />
+                            <div className="mt-8" style={{height: "300px", width: "100%"}}>
+                                <Line data={plotData("days")} options={plotOptions}/>
                             </div>
                         </div>
                         <div className="flex space-x-4 mt-6">

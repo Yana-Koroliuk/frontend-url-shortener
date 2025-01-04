@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
 import axios from "axios";
-import {isAuthenticated, logout} from "../api/auth";
+import {handleLogout, isAuthenticated} from "../api/auth";
 import Paths from "../config/paths";
 
 const UrlsPage = () => {
@@ -22,7 +22,7 @@ const UrlsPage = () => {
             const token = localStorage.getItem("token");
 
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/me`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             });
 
             setTotalUrls(response.data.links);
@@ -42,8 +42,8 @@ const UrlsPage = () => {
             const token = localStorage.getItem("token");
 
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/me/urls`, {
-                headers: { Authorization: `Bearer ${token}` },
-                params: { page },
+                headers: {Authorization: `Bearer ${token}`},
+                params: {page},
             });
 
             setUrls(
@@ -73,7 +73,7 @@ const UrlsPage = () => {
                     "Created At": new Date(url.created_at).toLocaleString(),
                     Actions: (
                         <button
-                            onClick={() => navigate(Paths.URL_DETAILS(url.short), { state: { url } })}
+                            onClick={() => navigate(Paths.URL_DETAILS(url.short), {state: {url}})}
                             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                         >
                             Details
@@ -101,13 +101,8 @@ const UrlsPage = () => {
         setCurrentPage((prevPage) => prevPage + direction);
     };
 
-    const handleLogout = () => {
-        logout();
-        navigate(Paths.LOGIN);
-    };
-
     return (
-        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout(navigate)}>
             <div className="max-w-4xl mx-auto mt-8 p-4">
                 <h1 className="text-2xl font-bold mb-4">Your Shortened URLs</h1>
                 <div className="flex justify-between items-center mb-4">
@@ -127,7 +122,7 @@ const UrlsPage = () => {
                     <p className="text-red-500">{error}</p>
                 ) : (
                     <>
-                        <Table columns={columns} data={urls} />
+                        <Table columns={columns} data={urls}/>
                         <div className="flex justify-between mt-4">
                             <button
                                 onClick={() => handlePageChange(-1)}
