@@ -1,7 +1,6 @@
 import {useState, useEffect} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import Layout from "../components/Layout";
-import axios from "axios";
 import {Line} from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -13,7 +12,7 @@ import {
     Legend,
 } from "chart.js";
 import {useLocation} from "react-router";
-import {handleLogout, isAuthenticated} from "../api/auth";
+import auth, {handleLogout, isAuthenticated} from "../api/auth";
 import Paths from "../config/paths";
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -22,27 +21,17 @@ const UrlDetailsPage = () => {
     const navigate = useNavigate();
     const {id} = useParams();
     const location = useLocation();
-    const [urlInfo, setUrlInfo] = useState(location.state?.url || null);
+    const [urlInfo] = useState(location.state?.url || null);
     const [redirects, setRedirects] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(!urlInfo);
 
     const fetchRedirects = async () => {
         try {
-            const token = localStorage.getItem("token");
-
-            const redirectsResponse = await axios.get(
-                `${process.env.REACT_APP_BACKEND_URL}/api/me/links/${id}/redirects`,
-                {headers: {Authorization: `Bearer ${token}`}}
-            );
-
+            const redirectsResponse = await auth.get(`/me/links/${id}/redirects`);
             setRedirects(redirectsResponse.data);
         } catch (err) {
-            if (err.response?.status === 401) {
-                navigate(Paths.LOGIN);
-            } else {
-                setError("Failed to fetch redirects. Please try again.");
-            }
+            setError("Failed to fetch redirects. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -106,7 +95,7 @@ const UrlDetailsPage = () => {
     };
 
     return (
-        <Layout isAuthenticated={isAuthenticated} onLogout={handleLogout(navigate)}>
+        <Layout isAuthenticated={isAuthenticated()} onLogout={() => handleLogout(navigate)}>
             <div className="max-w-4xl mx-auto mt-8 p-4">
                 {loading ? (
                     <p>Loading...</p>
@@ -166,7 +155,7 @@ const UrlDetailsPage = () => {
                                 Back to All URLs
                             </button>
                             <button
-                                onClick={() => navigate("/")}
+                                onClick={() => navigate(Paths.HOME)}
                                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                             >
                                 Back to Home
