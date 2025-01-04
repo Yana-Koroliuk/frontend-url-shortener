@@ -13,7 +13,7 @@ const UrlsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    const urlsPerPage = 10; // Assuming the backend returns 10 items per page
+    const urlsPerPage = 10;
     const columns = ["#", "Full URL", "Short URL", "Redirects", "Created At", "Actions"];
 
     const fetchTotalUrls = async () => {
@@ -24,7 +24,7 @@ const UrlsPage = () => {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            setTotalUrls(response.data.links); // Assuming `links` contains the total URL count
+            setTotalUrls(response.data.links);
         } catch (err) {
             if (err.response?.status === 401) {
                 navigate("/login");
