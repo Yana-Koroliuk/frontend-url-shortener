@@ -12,20 +12,20 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import {useLocation} from "react-router";
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const UrlDetailsPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const [urlInfo, setUrlInfo] = useState(null);
+    const location = useLocation();
+    const [urlInfo, setUrlInfo] = useState(location.state?.url || null);
     const [redirects, setRedirects] = useState([]);
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(!urlInfo);
 
-    const fetchUrlDetails = async () => {
-        setLoading(true);
-        setError("");
+    const fetchRedirects = async () => {
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -33,27 +33,17 @@ const UrlDetailsPage = () => {
                 return;
             }
 
-            const urlResponse = await axios.get(`http://localhost:8000/api/me/urls`, {
-                headers: { Authorization: `Bearer ${token}` },
-                params: { short: id },
-            });
-
             const redirectsResponse = await axios.get(
                 `http://localhost:8000/api/me/links/${id}/redirects`,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+                { headers: { Authorization: `Bearer ${token}` } }
             );
 
-            setUrlInfo(urlResponse.data);
             setRedirects(redirectsResponse.data);
         } catch (err) {
             if (err.response?.status === 401) {
                 navigate("/login");
-            } else if (err.response?.status === 404) {
-                setError("URL not found.");
             } else {
-                setError("An unexpected error occurred. Please try again.");
+                setError("Failed to fetch redirects. Please try again.");
             }
         } finally {
             setLoading(false);
@@ -61,8 +51,13 @@ const UrlDetailsPage = () => {
     };
 
     useEffect(() => {
-        fetchUrlDetails();
-    }, [id]);
+        if (!urlInfo) {
+            // If no state was passed, fetch the URL details from the backend
+            navigate("/urls");
+        } else {
+            fetchRedirects();
+        }
+    }, [id, urlInfo]);
 
     const processRedirects = (timestamps, groupBy) => {
         const counts = {};
@@ -123,7 +118,15 @@ const UrlDetailsPage = () => {
                         <h1 className="text-2xl font-bold mb-4">URL Details</h1>
                         <div className="mb-4">
                             <p>
-                                <strong>Full URL:</strong> {urlInfo.url}
+                                <strong>Full URL:</strong>
+                                <a
+                                    href={urlInfo.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-500 hover:underline"
+                                >
+                                    {urlInfo.url}
+                                </a>
                             </p>
                             <p>
                                 <strong>Short URL:</strong>{" "}

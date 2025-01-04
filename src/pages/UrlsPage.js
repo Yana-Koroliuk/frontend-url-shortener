@@ -79,7 +79,7 @@ const UrlsPage = () => {
                     created_at: new Date(url.created_at).toLocaleString(),
                     actions: (
                         <button
-                            onClick={() => navigate(`/urls/${url.short}`)}
+                            onClick={() => navigate(`/urls/${url.short}`, { state: { url } })}
                             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                         >
                             Details
