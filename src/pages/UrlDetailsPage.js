@@ -81,6 +81,19 @@ const UrlDetailsPage = () => {
         return Object.entries(counts).sort(([a], [b]) => new Date(a) - new Date(b));
     };
 
+    const plotOptions = {
+        responsive: true,
+        maintainAspectRatio: false, // Allows custom dimensions
+        scales: {
+            y: {
+                min: 0, // Ensure y-axis starts at 0
+                ticks: {
+                    stepSize: 1, // Increment y-axis by 1
+                },
+            },
+        },
+    };
+
     const plotData = (groupBy) => {
         const groupedRedirects = processRedirects(redirects, groupBy);
         return {
@@ -132,14 +145,14 @@ const UrlDetailsPage = () => {
                         </div>
                         <div className="mb-8">
                             <h2 className="text-xl font-bold">Redirect Metrics</h2>
-                            <div className="mt-4">
-                                <Line data={plotData("minutes")} />
+                            <div className="mt-4" style={{ height: "400px", width: "50%" }}>
+                                <Line data={plotData("minutes")} options={plotOptions} />
                             </div>
-                            <div className="mt-4">
-                                <Line data={plotData("hours")} />
+                            <div className="mt-4" style={{ height: "400px", width: "50%" }}>
+                                <Line data={plotData("hours")} options={plotOptions} />
                             </div>
-                            <div className="mt-4">
-                                <Line data={plotData("days")} />
+                            <div className="mt-4" style={{ height: "400px", width: "50%" }}>
+                                <Line data={plotData("days")} options={plotOptions} />
                             </div>
                         </div>
                         <div className="flex space-x-4">
